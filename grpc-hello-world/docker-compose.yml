@@ -1,0 +1,23 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    ports:
+      - "50051:50051"
+    networks:
+      - grpc-net
+
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    depends_on:
+      - server
+    environment:
+      GRPC_SERVER_ADDR: server:50051
+    networks:
+      - grpc-net
+
+networks:
+  grpc-net:

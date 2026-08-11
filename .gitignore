@@ -1,0 +1,9 @@
+.venv
+references/
+
+# Generated at docker build time (or by local codegen) from proto/*.proto
+grpc-hello-world/server/generated/
+grpc-hello-world/client/generated/
+__pycache__/
+*.pyc
+*.log
