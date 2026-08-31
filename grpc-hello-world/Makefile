@@ -1,34 +1,34 @@
-.PHONY: build up down restart logs logs-server logs-client client-logs ps clean
+# Docker compose app -- maps the shared verbs onto compose, plus a few extras.
 
-# Build both images (regenerates the pb2 stubs from proto/ during build).
-build:
-	docker compose build
+include ../make/common.mk
 
-# Start the server, then run the client against it (client exits after one call).
-up:
-	docker compose up --build
+COMPOSE := docker compose
 
-# Same as up, but detached; use `make logs` to follow output.
-up-d:
-	docker compose up --build -d
+.PHONY: up down logs logs-server logs-client ps
 
-down:
-	docker compose down
+install:            ## build both images (regenerates pb2 stubs from proto/)
+	$(COMPOSE) build
 
-restart: down up
+run:                ## start server, then the client against it
+	$(COMPOSE) up --build
 
-logs:
-	docker compose logs -f
+up-d:               ## same as run, detached
+	$(COMPOSE) up --build -d
+
+down:               ## stop the stack
+	$(COMPOSE) down
+
+logs:               ## follow all logs
+	$(COMPOSE) logs -f
 
 logs-server:
-	docker compose logs -f server
+	$(COMPOSE) logs -f server
 
 logs-client:
-	docker compose logs -f client
+	$(COMPOSE) logs -f client
 
-ps:
-	docker compose ps
+ps:                 ## show container status
+	$(COMPOSE) ps
 
-# Remove containers, networks, and images built by this compose file.
-clean:
-	docker compose down --rmi local -v
+clean:              ## remove containers, networks, and images built here
+	$(COMPOSE) down --rmi local -v

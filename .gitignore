@@ -1,9 +1,17 @@
-.venv
+# All app envs (python venvs, node_modules) live here -- see Makefile
+.envs/*
+!.envs/.gitkeep
+
+# Stray envs outside .envs/
+.venv/
+node_modules
+
 references/
 
 # Generated at docker build time (or by local codegen) from proto/*.proto
 grpc-hello-world/server/generated/
 grpc-hello-world/client/generated/
+
 __pycache__/
 *.pyc
 *.log
