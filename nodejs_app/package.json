@@ -9,6 +9,8 @@
     "dev": "node --watch server.js"
   },
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "graphql": "^16.14.2",
+    "graphql-yoga": "^5.22.0"
   }
 }
