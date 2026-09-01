@@ -7,8 +7,6 @@
 
 include ../make/common.mk
 
-SCRIPT := start
-
 install:            ## npm install, with node_modules parked in .envs/
 	@[ -f package.json ] || { echo "$(APP_NAME)/ has no package.json"; exit 1; }
 	npm install
@@ -26,15 +24,14 @@ link: | $(ENV)/node_modules
 $(ENV)/node_modules:
 	@echo "no env yet -- run: make install $(APP_NAME)"; exit 1
 
-run: link           ## npm run start
-	npm run $(SCRIPT)
-
-dev:                ## npm run start with node --watch
-	@$(MAKE) --no-print-directory link
+run: link           ## serve, restarting on file changes (node --watch)
 	npm run dev
+
+start: link         ## serve once, no watcher
+	npm run start
 
 clean:              ## remove node_modules and the symlink
 	rm -rf $(ENV)
 	@[ -L node_modules ] && rm -f node_modules || true
 
-.PHONY: link dev
+.PHONY: link start
