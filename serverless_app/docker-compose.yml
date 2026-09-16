@@ -1,0 +1,18 @@
+services:
+  offline:
+    build: .
+    ports:
+      - "4000:4000"
+    volumes:
+      # Handler edits reach the running emulator without a rebuild. Changes to
+      # serverless.yml are baked into the image, so they need `make run` again.
+      - ./functions:/app/functions
+    healthcheck:
+      # A bare TCP connect: it passes only once serverless-offline is listening,
+      # and unlike an HTTP probe it doesn't invoke a function and fill the logs.
+      test: ["CMD", "node", "-e", "require('net').connect(4000, '127.0.0.1').on('connect', () => process.exit(0)).on('error', () => process.exit(1))"]
+      start_period: 60s
+      start_interval: 1s
+      interval: 30s
+      timeout: 3s
+      retries: 3

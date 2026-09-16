@@ -16,3 +16,6 @@ __pycache__/
 *.pyc
 *.log
 .pytest_cache/
+
+# Serverless Framework build output
+.serverless/

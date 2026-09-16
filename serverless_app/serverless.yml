@@ -1,0 +1,51 @@
+# One service, two functions, two runtimes. Locally, serverless-offline turns
+# each httpApi event into a real HTTP route; deployed, the same file would
+# create the API Gateway routes and the Lambda functions.
+
+service: serverless-app
+
+provider:
+  name: aws
+  runtime: nodejs22.x          # the default for every function...
+  stage: dev
+  region: us-east-1
+
+plugins:
+  - serverless-offline
+
+# osls (the framework) has no runtime deps of its own, so nothing under
+# node_modules/ is needed in the deployed zip -- it only holds osls and
+# serverless-offline, both dev tooling.
+package:
+  patterns:
+    - '!node_modules/**'
+    - '!.serverless/**'
+    - '!.git/**'
+    - '!Dockerfile'
+    - '!docker-compose.yml'
+    - '!Makefile'
+    - '!.dockerignore'
+    - '!.npmrc'
+
+custom:
+  serverless-offline:
+    host: 0.0.0.0              # listen beyond the container's loopback
+    httpPort: 4000
+    lambdaPort: 4002
+    reloadHandler: true        # re-read handler code per call, so edits apply live
+
+functions:
+  helloNode:
+    handler: functions/node/hello.handler
+    events:
+      - httpApi:
+          path: /hello/node
+          method: get
+
+  helloPython:
+    handler: functions/python/hello.handler
+    runtime: python3.11        # ...unless overridden; matches the image's python3
+    events:
+      - httpApi:
+          path: /hello/python
+          method: get

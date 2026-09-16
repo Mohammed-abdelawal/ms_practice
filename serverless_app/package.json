@@ -1,0 +1,13 @@
+{
+  "name": "serverless_app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "serverless practice service -- Node and Python functions run locally via osls + serverless-offline",
+  "scripts": {
+    "offline": "osls offline start"
+  },
+  "devDependencies": {
+    "osls": "^4.3.1",
+    "serverless-offline": "^14.8.2"
+  }
+}
